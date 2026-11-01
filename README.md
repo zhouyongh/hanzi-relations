@@ -34,11 +34,9 @@
 |---|---|---|
 | SQLite | `hanzi-relations.db` | 215 MiB，见 [Releases](https://github.com/zhouyongh/hanzi-relations/releases)（推荐） |
 | JSONL | `data/` | 全量事实，一来源一目录 |
-| 浏览页 | `viewer/index.html` | 单文件；正文离线可用，字形图按需联网 |
+| 浏览页 | `viewer/index.html` | 单文件，离线可用 |
 
 浏览页另有 `kangxi.html`（康熙字头）与 `compare.html`（按书对比）。
-
-查一个字时，若该字在 [hanzi-glyphs-svg](https://github.com/zhouyongh/hanzi-glyphs-svg) 里有字形，会在顶部按层显示（篆书、甲骨、金文等）。SVG 按需从该仓库或 CDN 读取，**不复制进本库**。
 
 ## 用法
 

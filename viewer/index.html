@@ -64,15 +64,6 @@ aside{border-right:1px solid var(--line);background:var(--panel);
 .pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;
   background:#f0ebe0;color:var(--accent);margin:2px 4px 2px 0}
 .pill.g{background:#eef2f7;color:#3b5670}
-/* 字形缩略图：只在这里按需从 hanzi-glyphs-svg 取，SVG 文件不入库 */
-.grow{display:flex;gap:10px;align-items:center;margin:8px 0}
-.grow:first-child{margin-top:0}
-.glayer{flex:0 0 64px;text-align:right;font-size:12px;color:var(--mute);white-space:nowrap}
-.gstrip{display:flex;flex-wrap:wrap;gap:8px}
-.gph{margin:0}
-.gph img{width:76px;height:76px;display:block;background:#fff;border:1px solid var(--line);
-  border-radius:6px;object-fit:contain}
-.gph.bad{display:none}
 /* 陳述 kind 徽章：一列裏混着釋文、反切、校語，不標類別就分不清
    「哪條是釋義、哪條是音」。配色只為分組，不是裝飾。 */
 .kb{font-size:10.5px;padding:1px 5px;border-radius:3px;background:#5c7a68;color:#fff;
@@ -334,46 +325,6 @@ const KIND = {gloss:'義', note:'校語', commentary:'注', phonology:'音',
 const KCLS = {phonology:'phon', commentary:'note', note:'note', citation:'cite',
   variant_note:'var', structure:'st', radical_lookup:'lk', radical_compare:'lk',
   frequency:'fq', radical_alt:'lk', serial:'note'};
-/* 字形：浏览页查到一个字时按需取 SVG，**文件不复制进本库**。
-   源是并排的 hanzi-glyphs-svg（本地 file:// 可直接读），部署到网上则走 CDN。
-   注意：hanzi-glyphs-svg 的 Pages 只发布它自己的浏览页，`glyphs/` 不在站点根
-   （1.1 GB、19 万文件，Pages 装不下），所以不能拿它的 Pages 当字形源。 */
-const GLYPH_LABEL = {oracle:'甲骨', bronze:'金文', seal:'篆書', clerical:'隸書',
-  chu:'楚簡', chuanchao:'傳抄古文', qinwenzi:'秦簡', kaishu:'楷書', xingshu:'行書',
-  caoshu:'草書', songti:'宋體', 'songti-tc':'宋體（繁）', 'heiti-hk':'黑體'};
-const GLYPH_ORDER = ['seal','oracle','bronze','chu','chuanchao','qinwenzi','clerical',
-  'kaishu','xingshu','caoshu','songti','songti-tc','heiti-hk'];
-const GLYPH_BASES = [];
-if (location.protocol === 'file:') GLYPH_BASES.push('../../hanzi-glyphs-svg/glyphs/');
-GLYPH_BASES.push(
-  'https://cdn.jsdelivr.net/gh/zhouyongh/hanzi-glyphs-svg@main/glyphs/',
-  'https://fastly.jsdelivr.net/gh/zhouyongh/hanzi-glyphs-svg@main/glyphs/',
-  'https://gcore.jsdelivr.net/gh/zhouyongh/hanzi-glyphs-svg@main/glyphs/',
-  'https://raw.githubusercontent.com/zhouyongh/hanzi-glyphs-svg/main/glyphs/');
-/* 字形图片按 GLYPH_BASES 顺序试：本地并排仓库 → jsDelivr 三个节点 → raw。
-   全部失败才把这一格藏掉；整页一张都没取到，才显示「需联网」提示。 */
-function loadGlyphs(){
-  const imgs = Array.from(document.querySelectorAll('#detail .gph img[data-layer]'));
-  if (!imgs.length) return;
-  let left = imgs.length, ok = 0;
-  const note = document.querySelector('#detail .gnote');
-  const settle = () => { if (--left === 0 && !ok && note) note.hidden = false; };
-  imgs.forEach(img => {
-    let i = 0;
-    const fail = () => {
-      i++;
-      if (i >= GLYPH_BASES.length){
-        img.closest('.gph').classList.add('bad');
-        settle();
-        return;
-      }
-      img.src = GLYPH_BASES[i] + img.dataset.layer + '/' + img.dataset.id + '.svg';
-    };
-    img.onerror = fail;
-    img.onload = () => { ok++; settle(); };
-    img.src = GLYPH_BASES[0] + img.dataset.layer + '/' + img.dataset.id + '.svg';
-  });
-}
 /* 正文前的类别标签：「注」「釋義」「音」……
    类别必须是正文的**第一个词**（读者原话：「注：xxx / 釋義：xxx」），
    但只上色不留底色，扫读时还是看不出分段——所以套成**一块底色**（.lbl），
@@ -637,35 +588,6 @@ function renderDetail(c){
     }
   }
 
-  /* 字形：只在这个字被打开时取（按需），SVG 不进 data/、不进 DB、不进本仓库。
-     一个字的字形可能跨很多层（月：甲骨 9 + 篆書 1），按层分行，免得混成一排。 */
-  const gl = D.g[c.id];
-  if (gl && gl.length){
-    const byLayer = {};
-    for (const g of gl){
-      const p = g.split(':');
-      (byLayer[p[2]] = byLayer[p[2]] || []).push(p[3]);
-    }
-    const layers = Object.keys(byLayer).sort((a,b) => {
-      const ia = GLYPH_ORDER.indexOf(a), ib = GLYPH_ORDER.indexOf(b);
-      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
-    });
-    h += '<div class="sec">字形<span class="n">' + gl.length + '</span></div><div class="card">';
-    for (const layer of layers){
-      h += '<div class="grow"><div class="glayer">' + esc(GLYPH_LABEL[layer] || layer) +
-           '</div><div class="gstrip">';
-      for (const id of byLayer[layer]){
-        h += '<figure class="gph" title="' + esc(layer + ' / ' + id) + '">' +
-             '<img loading="lazy" alt="' + esc(c.h) + '（' + esc(GLYPH_LABEL[layer] || layer) + '）"' +
-             ' data-layer="' + esc(layer) + '" data-id="' + esc(id) + '"></figure>';
-      }
-      h += '</div></div>';
-    }
-    h += '<div class="lnk">字形来自 <a href="https://github.com/zhouyongh/hanzi-glyphs-svg" target="_blank" rel="noopener">hanzi-glyphs-svg</a>，按需读取、不复制进本库。各层许可不同：甲骨含 CC BY 4.0，楷/行/草/宋/黑为 OFL 1.1，其余 CC0，详见该仓库 THIRD_PARTY_NOTICES。</div>';
-    h += '<div class="lnk gnote" hidden>字形需联网：本地未找到 hanzi-glyphs-svg，CDN 也没取到。</div>';
-    h += '</div>';
-  }
-
   h += '<div class="sec">說文原文</div>';
   for (const s of gloss){
     h += '<div class="card"><div class="who">' +
@@ -758,6 +680,17 @@ function renderDetail(c){
         h += '</div>';
       }
     }
+  }
+  const gl = D.g[c.id];
+  if (gl && gl.length){
+    h += '<div class="sec">字形（指向 hanzi-glyphs-svg）</div><div class="card">';
+    for (const g of gl){
+      const p = g.split(':');
+      h += '<span class="pill g">'+esc(p[2])+' · '+esc(p[3])+'</span>';
+    }
+    const first = gl[0].split(':');
+    h += '<div class="lnk">字形文件在 <code>hanzi-glyphs-svg/glyphs/'+esc(first[2])+'/'+
+         '</code>，本库只存指针不复制。</div></div>';
   }
   /* 引文：康熙条目里内嵌的他书引文（浏览页只列书名与条数，正文在 SQLite/JSONL） */
   const cb = (D.b || {})[c.id];
@@ -866,7 +799,6 @@ function renderDetail(c){
          '它們的說解並列存，點上方字頭可切換。</div></div>';
   }
   el('detail').innerHTML = h;
-  loadGlyphs();
   /* 勾选栏的绑定：勾上哪一列，就显示哪一列的那一块（默认全折起）。
      「全选」把同一档的所有列一起勾上。
      勾上的 chip 变色（不然白底一片，看不出自己勾了哪些）；
