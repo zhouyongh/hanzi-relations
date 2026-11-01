@@ -91,10 +91,10 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "bytes": 2673,
+      "bytes": 2728,
       "lines": 3,
       "path": "data/sources.jsonl",
-      "sha256": "cec1c524460958c2be7d37430e5d0f54fc6e9c269749f6fb00d6717015f192f8"
+      "sha256": "88d955dc4ed1abf95c00f154f7d864832c99a18b3005b24c22149e42264ad6fd"
     },
     {
       "bytes": 0,
@@ -169,7 +169,7 @@
       "sha256": "ddd802351209f2538e972490089b449de7885c1694a5a8d69f66a74ea4c00a1c"
     }
   ],
-  "generated_at": "2026-11-01T10:58:25.096182+00:00",
+  "generated_at": "2026-11-01T11:10:23.174910+00:00",
   "schema_version": 2,
   "scope": [
     "data",
@@ -177,7 +177,7 @@
   ],
   "sqlite_schema_version": 3,
   "totals": {
-    "bytes": 185389991,
+    "bytes": 185390046,
     "files": 28,
     "lines": 626540
   }

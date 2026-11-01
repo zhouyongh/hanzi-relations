@@ -36,7 +36,7 @@
 
 | 来源 | 许可 | 说明 |
 |---|---|---|
-| `shuowenjiezi/shuowen`（说文检索数据） | **Apache-2.0** | 须保留许可与 NOTICE（`LICENSES/Apache-2.0.txt`），并注明改动 |
+| `shuowenjiezi/shuowen`（说文检索数据） | **Apache-2.0** | 须保留许可（`LICENSES/Apache-2.0.txt`）与版权声明（Copyright 2019 Shuowen.org），并注明改动；上游无 NOTICE 文件 |
 | 康熙字典数据（`samsonhoi/kangxi-dictionary`） | **MIT** | 须保留版权与许可声明（`LICENSES/MIT-samsonhoi-kangxi-dictionary.txt`） |
 | `daizhige-org/daizhigev20` 小学书 | **Public-Domain** | 39 本《说文》三本正文与传统小学书；**逐书核对过来源**，无一来自维基文库 |
 

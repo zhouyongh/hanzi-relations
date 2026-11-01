@@ -18,7 +18,7 @@ CC0 1.0 释出，CC0 是放弃权利，不是许可别人加条件。
 
 - **来源**：<https://github.com/shuowenjiezi/shuowen>（取 `data/<id>.json`，上游 9,833 字）
 - **许可**：**Apache License 2.0**（全文 `LICENSES/Apache-2.0.txt`）
-- **署名**：`shuowenjiezi/shuowen contributors`
+- **署名**：`Shuowen.org`（Copyright 2019）；`shuowenjiezi/shuowen contributors`
 - **本库的用法**：拆成「陈述 / 边」两表；許慎原文与段注各占一列、不合并；
   段注用 `parent_statement_id` 回指被注原文；《說文》重文单独立字头；补 `mpinyin`。
   本版由此得到 **11,102 个說文系字头、21,506 条原文陈述、34,482 条段注陈述**。
