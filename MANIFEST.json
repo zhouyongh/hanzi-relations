@@ -49,10 +49,10 @@
       "sha256": "a1f266c69dbaebf5df06b215adf7ba49508d37e99e83af9962464c8ea065aecf"
     },
     {
-      "bytes": 34666092,
+      "bytes": 36003733,
       "lines": 55988,
       "path": "data/provenance/shuowenjiezi_shuowen/part-00001.jsonl",
-      "sha256": "69cfb557375442ce75be4168d3a131fbe84ae8937e3bc7d4bcec452108fef926"
+      "sha256": "2d705299da5ce64874a5d0d35242e7d98fa46d5f80185f220f092c530990143b"
     },
     {
       "bytes": 101614,
@@ -91,10 +91,10 @@
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "bytes": 2517,
+      "bytes": 2673,
       "lines": 3,
       "path": "data/sources.jsonl",
-      "sha256": "95db22ffd1764b2086f9f1799139b93d776d94f83b1bbfc5a65f73041bfca8c9"
+      "sha256": "cec1c524460958c2be7d37430e5d0f54fc6e9c269749f6fb00d6717015f192f8"
     },
     {
       "bytes": 0,
@@ -169,7 +169,7 @@
       "sha256": "ddd802351209f2538e972490089b449de7885c1694a5a8d69f66a74ea4c00a1c"
     }
   ],
-  "generated_at": "2026-11-01T09:09:34.638562+00:00",
+  "generated_at": "2026-11-01T10:58:25.096182+00:00",
   "schema_version": 2,
   "scope": [
     "data",
@@ -177,7 +177,7 @@
   ],
   "sqlite_schema_version": 3,
   "totals": {
-    "bytes": 184052194,
+    "bytes": 185389991,
     "files": 28,
     "lines": 626540
   }

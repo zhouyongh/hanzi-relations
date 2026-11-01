@@ -67,7 +67,7 @@ xiaoxue_尔雅        2
   "edition_id": "shuowen_xu_shen",
   "kind": "gloss",
   "text": "闕也。大陰之精。象形。凡月之屬皆从月。",
-  "evidence_url": "https://zh.wikisource.org/wiki/說文解字/07",
+  "evidence_url": "https://github.com/shuowenjiezi/shuowen/blob/6553a35076/data/4291.json",
   "license": "Apache-2.0",
   "source_id": "shuowenjiezi_shuowen"
 }
