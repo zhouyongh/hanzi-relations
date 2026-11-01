@@ -165,7 +165,7 @@ function kwHtml(t){
     s = s.replace(/【([^】]{1,60})】/g, function (m, name) {
       return '<span class="bk' + (KW_MARK.has(name) ? ' m' : '') + '">' + name + '</span>';
     });
-    if (i > 0) s = '<span class="y">又</span>' + s.replace(/^又/, '');
+    if (i > 0) s = '<span class="y">（又）</span>' + s.replace(/^又/, '');
     return '<div class="sense">' + s + '</div>';
   }).join('');
 }

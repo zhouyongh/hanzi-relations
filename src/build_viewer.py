@@ -1117,7 +1117,7 @@ function kwHtml(t){
     s = s.replace(/【([^】]{1,60})】/g, function (m, name) {
       return '<span class="bk' + (KW_MARK.has(name) ? ' m' : '') + '">' + name + '</span>';
     });
-    if (i > 0) s = '<span class="y">又</span>' + s.replace(/^又/, '');
+    if (i > 0) s = '<span class="y">（又）</span>' + s.replace(/^又/, '');
     return '<div class="sense">' + s + '</div>';
   }).join('');
 }
@@ -1368,19 +1368,23 @@ function renderDetail(c){
     h += '</div>';
   }
   if (duan.length){
-    h += '<div class="sec">段玉裁《說文解字注》 · 逐條對照</div>';
-    for (const s of duan){
-      h += '<div class="card"><div class="who">' +
-           '<span class="tag duan">段注</span>'+
-           '<span class="tag">'+esc(edLabel(s.e))+'</span>'+
-           '<span class="tag">'+esc(s.L||'')+'</span></div>';
-      /* 不在每條注上面重複整段《說文》原文：原文已經在上面的「說文原文」卡片裡
-         顯示過一次，而每條段注本身又以它所注的詞句開頭（「从口。 謂山閒。」）。
-         逐條重複整段原文，一個字有六七條注時就會變成六七份同樣的長文。 */
-      h += '<div class="txt">'+ktxt(s)+'</div>';
-      if (s.u) h += '<div class="lnk">出处：<a href="'+esc(s.u)+'" target="_blank" rel="noopener">'+esc(s.u)+'</a></div>';
-      h += '</div>';
-    }
+    /* 一个字的段注合并成一张卡：头部（段注/书名/许可）只出现一次，出处只留一条。
+       音提到最前，注按原顺序排；引文（citation）已嵌在注文里，不再单独占一行。 */
+    let duanLines = duan.filter(s => s.k !== 'citation');
+    if (!duanLines.length) duanLines = duan.slice();
+    const first = duanLines[0];
+    const duanU = (duanLines.find(s => s.u) || {}).u;
+    const ph = duanLines.filter(s => s.k === 'phonology');
+    const rest = duanLines.filter(s => s.k !== 'phonology');
+    h += '<div class="sec">段玉裁《說文解字注》</div>';
+    h += '<div class="card"><div class="who">' +
+         '<span class="tag duan">段注</span>'+
+         '<span class="tag">'+esc(edLabel(first.e))+'</span>'+
+         '<span class="tag">'+esc(first.L||'')+'</span></div>';
+    for (const s of ph) h += '<div class="txt">' + klab(s.k) + esc(s.t) + '</div>';
+    for (const s of rest) h += '<div class="txt">' + ktxt(s) + '</div>';
+    if (duanU) h += '<div class="lnk">出处：<a href="'+esc(duanU)+'" target="_blank" rel="noopener">'+esc(duanU)+'</a></div>';
+    h += '</div>';
   }
   if (other.length){
     /* 列分档（设计裁定 D54）：**一个字默认只看 base 4 列**，其余列折叠、逐列勾选。
@@ -1985,7 +1989,7 @@ function kwHtml(t){
     s = s.replace(/【([^】]{1,60})】/g, function (m, name) {
       return '<span class="bk' + (KW_MARK.has(name) ? ' m' : '') + '">' + name + '</span>';
     });
-    if (i > 0) s = '<span class="y">又</span>' + s.replace(/^又/, '');
+    if (i > 0) s = '<span class="y">（又）</span>' + s.replace(/^又/, '');
     return '<div class="sense">' + s + '</div>';
   }).join('');
 }
