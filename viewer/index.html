@@ -16,6 +16,7 @@ header{background:var(--panel);border-bottom:1px solid var(--line);padding:18px 
   position:sticky;top:0;z-index:10;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 h1{margin:0 0 4px;font-size:20px;letter-spacing:.02em}
 .sub{color:var(--mute);font-size:13px}
+.sub.en{font-size:12px;opacity:.85;margin-top:3px}
 .bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
 input[type=search]{flex:1;min-width:220px;padding:9px 12px;font:inherit;font-size:15px;
   border:1px solid var(--line);border-radius:6px;background:#fff}
@@ -145,6 +146,7 @@ aside{border-right:1px solid var(--line);background:var(--panel);
 <header>
   <h1>漢字引用關係庫 <span style="font-size:13px;color:var(--mute)">hanzi-relations</span></h1>
   <div class="sub">以字為索引，把各部典籍對同一個字的說解、版本差異、字形/部首/音韻/異體的關係，結構化成可追溯的引用關係。</div>
+  <div class="sub en">A character-indexed citation graph of Chinese classics: glosses, commentaries, and glyph / radical / variant relations.</div>
   <div class="bar">
     <input type="search" id="q" placeholder="輸入漢字、拼音、部首…（如：明、月、ming、肉）" autocomplete="off">
     <button id="btnAll" class="on">全部</button>
@@ -870,9 +872,9 @@ load().then(() => {
      注意《说文》字头与现代字不一一对应：「明」在《说文》里是「朙」的古文，
      两者是两个字头（各有各的陈述）。深链应优先选**有许慎原文**的那个字头，
      否则会落到只有一条重文说明的「明」上。 */
-  /* 默认落在一个字上：首屏空白不像「能查」的页。用「和」——它有許慎原文、
-     段注与反切，四条陈述，正好展示正文的层次。 */
-  const hash = decodeURIComponent(location.hash.replace(/^#/, '')).trim() || '和';
+  /* 默认落在一个字上：首屏空白不像「能查」的页。用「字」——它本身就是「字」，
+     首屏能直接看到原文、段注与关系。 */
+  const hash = decodeURIComponent(location.hash.replace(/^#/, '')).trim() || '字';
   if (hash){
     /* 走 rows()（含排序）而不是 search()：
        「明」在《说文》里有两个字头——「明」（朙的古文，只有 1 条重文说明）

@@ -4,7 +4,7 @@
 
 当前典籍只收录了四部：《說文解字》許慎原文、段玉裁注、《爾雅》、《康熙字典》；支持扩展典籍。
 
-预览：<https://zhouyongh.github.io/hanzi-relations/viewer/index.html>（默认打开「和」字）
+预览：<https://zhouyongh.github.io/hanzi-relations/viewer/index.html>
 
 ## 收录内容
 
@@ -14,7 +14,7 @@
 | 条目（原文、注、引文、反切） | 196,021 |
 | 关系 | 371,276 |
 | 部首 | 540（《說文》全部） |
-| 体积 | JSONL 175.5 MiB · SQLite 215 MiB |
+| 体积 | JSONL 176.8 MiB · SQLite 216 MiB |
 
 四部书的数据来源：
 
@@ -100,10 +100,15 @@ xiaoxue_尔雅        2
 
 | 范围 | 许可 |
 |---|---|
-| `data/` 正文 | 逐来源：Apache-2.0（說文检索数据）、MIT（康熙字典数据集）、Public-Domain（殆知閣） |
+| `data/` 正文：《說文》原文、段注 | Apache-2.0（[shuowenjiezi/shuowen](https://github.com/shuowenjiezi/shuowen)，Copyright 2019 Shuowen.org） |
+| `data/` 正文：《康熙字典》 | MIT（[samsonhoi/kangxi-dictionary](https://github.com/samsonhoi/kangxi-dictionary)） |
+| `data/` 正文：《爾雅》 | Public-Domain（[daizhige-org/daizhigev20](https://github.com/daizhige-org/daizhigev20)） |
 | `data/` 编排、`src/**`、`viewer/**`、文档 | CC0 1.0 |
+| 字形文件（**不在本库**） | [hanzi-glyphs-svg](https://github.com/zhouyongh/hanzi-glyphs-svg) 逐层许可：CC0 / CC BY 4.0 / OFL 1.1；本库只存指针 |
 
-零 copyleft，可商用、可再分发。第三方署名、改动声明与许可全文见
+本库自身（`data/`、`src/**`、`viewer/**`、文档）零 copyleft，可商用、可再分发。
+《說文》原文与段注原书早已进入公有领域；这里的 Apache-2.0 是上游**数据集**的许可。
+第三方署名、改动声明与许可全文见
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)、[LICENSES/](LICENSES/)。
 
 ## 相关
