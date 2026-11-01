@@ -48,7 +48,7 @@ aside{border-right:1px solid var(--line);background:var(--panel);
 .tag.duan{background:#e8f0ec;color:var(--accent2);border-color:#d5e2dc}
 .tag.xuan{background:#f2ebf2;color:#6b4a72;border-color:#e2d5e2}
 .tag.g{background:#eef2f7;color:#3b5670;border-color:#d6e0ec}
-/* 段注卡里「所注原文」与「注」各是一行 .txt：靠 4px 间距分开，类别块都在行首同一处。 */
+/* 同一张卡里若有多个 .txt（如原文 + 校语），靠 5px 间距分开，类别块都在行首同一处。 */
 .txt + .txt{margin-top:5px}
 .cite{margin:9px 0;padding:9px 12px;border-left:3px solid #d8cdb4;
   background:#fbf8f1;border-radius:0 6px 6px 0}
@@ -600,15 +600,13 @@ function renderDetail(c){
   if (duan.length){
     h += '<div class="sec">段玉裁《說文解字注》 · 逐條對照</div>';
     for (const s of duan){
-      const p = s.p ? gb.get(s.p) : null;
       h += '<div class="card"><div class="who">' +
            '<span class="tag duan">段注</span>'+
            '<span class="tag">'+esc(edLabel(s.e))+'</span>'+
            '<span class="tag">'+esc(s.L||'')+'</span></div>';
-      /* 段注下面是「[注] …」，上面那行是它所注的原文——用**同一套类别色块**写在正文区
-         （不再用引文样式：引文样式是灰色小字 + 左边线，读者看不出它和「注」是一对）。 */
-      if (p) h += '<div class="txt">' + (klab(p.k) || '<span class="lbl">所注</span>') +
-                  esc(p.t) + '</div>';
+      /* 不在每條注上面重複整段《說文》原文：原文已經在上面的「說文原文」卡片裡
+         顯示過一次，而每條段注本身又以它所注的詞句開頭（「从口。 謂山閒。」）。
+         逐條重複整段原文，一個字有六七條注時就會變成六七份同樣的長文。 */
       h += '<div class="txt">'+ktxt(s)+'</div>';
       if (s.u) h += '<div class="lnk">出处：<a href="'+esc(s.u)+'" target="_blank" rel="noopener">'+esc(s.u)+'</a></div>';
       h += '</div>';
