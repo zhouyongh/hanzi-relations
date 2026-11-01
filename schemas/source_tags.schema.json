@@ -1,0 +1,41 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/source_tags.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Unihan 异体来源标签 → 工具书对照。",
+  "properties": {
+    "count": {
+      "description": "条数",
+      "type": "integer"
+    },
+    "note": {
+      "description": "说明",
+      "type": "string"
+    },
+    "tag": {
+      "description": "本库的标签",
+      "type": "string"
+    },
+    "tool": {
+      "description": "对应的工具书",
+      "type": "string"
+    },
+    "upstream_tags": {
+      "description": "上游的原始标签",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "tag",
+    "tool",
+    "upstream_tags",
+    "count",
+    "note"
+  ],
+  "schema_version": 2,
+  "title": "异体来源标签（source_tags）",
+  "type": "object"
+}

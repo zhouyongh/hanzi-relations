@@ -1,0 +1,79 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/characters.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "每个来源各造一批字头行；「一个字一行、来源是列」的心智模型。",
+  "properties": {
+    "canonical_id": {
+      "description": "**身份**键：跨来源按码位归并（不可用于聚合异体）",
+      "type": "string"
+    },
+    "char_id": {
+      "description": "字头 id（身份，按码位归并前的行 id）",
+      "pattern": "^C\\d{6,7}$",
+      "type": "string"
+    },
+    "head": {
+      "description": "字头（繁体原字）",
+      "type": "string"
+    },
+    "modern_codepoints": {
+      "description": "对应的现代码位（十六进制）",
+      "items": {
+        "pattern": "^[0-9A-F]{4,6}$",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "mpinyin": {
+      "description": "多音拼音（可选，仅部分来源有）",
+      "type": "string"
+    },
+    "pinyin": {
+      "description": "拼音（可能为空串）",
+      "type": "string"
+    },
+    "search_group": {
+      "description": "**可达性**键：异体/简繁连通分量（只可检索候选）",
+      "type": "string"
+    },
+    "source_ids": {
+      "description": "该字头出现过的来源 id 列表",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "upstream_id": {
+      "description": "上游自己的条目号（可空）",
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    },
+    "volume": {
+      "description": "卷次",
+      "type": "string"
+    },
+    "work_id": {
+      "description": "来源 id（字头来自哪部书）",
+      "type": "string"
+    }
+  },
+  "required": [
+    "char_id",
+    "head",
+    "work_id",
+    "canonical_id",
+    "search_group",
+    "source_ids",
+    "modern_codepoints",
+    "pinyin",
+    "volume",
+    "upstream_id"
+  ],
+  "schema_version": 2,
+  "title": "字头（characters）",
+  "type": "object"
+}

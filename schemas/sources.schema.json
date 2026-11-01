@@ -1,0 +1,63 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/sources.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "**许可闸门的唯一事实源**：一源一条。",
+  "properties": {
+    "attribution": {
+      "description": "署名要求",
+      "type": "string"
+    },
+    "kind": {
+      "description": "来源类型",
+      "type": "string"
+    },
+    "license": {
+      "description": "许可标识（逐源记）",
+      "type": "string"
+    },
+    "name": {
+      "description": "来源名",
+      "type": "string"
+    },
+    "notes": {
+      "description": "备注（Public-Domain 必须写明逐书核对的方式与结果）",
+      "type": "string"
+    },
+    "redistributable": {
+      "description": "原文可否再分发；false 时只存指针 + 自撰摘要",
+      "type": "boolean"
+    },
+    "retrieved_at": {
+      "description": "取回时间",
+      "type": "string"
+    },
+    "source_id": {
+      "description": "来源 id",
+      "type": "string"
+    },
+    "url": {
+      "description": "上游地址",
+      "type": "string"
+    },
+    "version": {
+      "description": "上游版本 / commit sha（**不写分支名**）",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_id",
+    "name",
+    "url",
+    "kind",
+    "license",
+    "redistributable",
+    "attribution",
+    "notes",
+    "retrieved_at",
+    "version"
+  ],
+  "schema_version": 2,
+  "title": "来源（sources）",
+  "type": "object"
+}

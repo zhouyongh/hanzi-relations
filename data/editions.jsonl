@@ -1,0 +1,4 @@
+{"edition_id": "kangxi_dict", "work_id": "kangxi", "axis": "annotator", "name": "《康熙字典》", "note": "清·張玉書等編"}
+{"edition_id": "shuowen_duan_yucai", "work_id": "shuowen", "axis": "annotator", "name": "段玉裁《說文解字注》", "note": "上游 duan_notes 字段；按被注原句对齐"}
+{"edition_id": "shuowen_xu_shen", "work_id": "shuowen", "axis": "annotator", "name": "許慎《說文解字》原文", "note": "大徐本正文；上游 explanation 字段"}
+{"edition_id": "xiaoxue_尔雅", "work_id": "xiaoxue", "axis": "annotator", "name": "爾雅", "note": "殆知閣《爾雅》正文（切分規則：punct；字頭模式：bracket_head）"}

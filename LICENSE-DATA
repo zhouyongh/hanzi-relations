@@ -1,0 +1,87 @@
+本仓库的**数据**许可**逐来源不同**，以 `data/sources.jsonl` 每条记录的 `license` 字段为准。
+
+`data/sources.jsonl` 是许可判定的**唯一事实源**。每条记录带两个字段：
+
+- `license` — 该来源的许可标识（本版只有 `Apache-2.0`、`MIT`、`Public-Domain`）
+- `redistributable` — 布尔值。`true` 表示该来源的内容**可以**进本仓库并随仓库再分发；
+  `false` 表示**只存指针**，原文不入库（v1 没有这类来源）
+
+## 数据分层
+
+| 层 | 文件 | 许可 | 全文位置 |
+|---|---|---|---|
+| 字头主表 | `data/characters/part-*.jsonl` | **逐条**（见各条 `source_ids` 对应来源） | 本文 / `LICENSES/` |
+| 陈述表 | `data/provenance/<source_id>/part-*.jsonl` | **逐条**（每条陈述带自己的 `license`） | 同上 |
+| 关系表 | `data/relations/part-*.jsonl` | **不带许可**——边只连实体，许可在它指向的陈述上 | 同上 |
+| 部首表 | `data/radicals.jsonl` | **逐条**（本版只有《說文》540 部） | 同上 |
+| 列 / 版本登记 | `data/columns.jsonl`、`data/editions.jsonl` | 本仓库整理，**CC0 1.0** | `LICENSE-DOCS` |
+| 来源登记表 | `data/sources.jsonl` | 本仓库整理，**CC0 1.0** | `LICENSE-DOCS` |
+| 已知缺口 | `data/known_gaps.jsonl` | 本仓库整理，**CC0 1.0** | `LICENSE-DOCS` |
+| 空值域表 | `data/readings.jsonl`、`structures.jsonl`、`rhyme_groups.jsonl`、`source_tags.jsonl` | 空表（本版无内容） | — |
+| SQLite 构建件 | `hanzi-relations.db` | 构建产物，**不入库**；如分发则继承各表逐条许可 | 同上 |
+
+> **本仓库对数据做的选择、编排、索引、关系结构**（哪些字、怎么对齐、`canonical_id`
+> 怎么归并、边怎么连）以 **CC0 1.0** 释出；**每条正文本身**仍按来源许可使用。
+> 两者分开看：编排可以随便用，正文要看 `data/sources.jsonl`。
+
+> **为什么边不带许可**：本库把「陈述」当作事实单元，**边只是连接**。
+> 一条 `variant_of` 边（字↔字）自身不构成事实，支撑它的是若干条陈述——
+> 边上的 `statement_ids` 列指明是哪些。所以判断一条边的许可，要顺着
+> `statement_ids` 看那些陈述的 `license`。
+
+**没有单一协议覆盖整库。** 下游须按每条记录/每个来源的许可分别使用；
+`data/sources.jsonl` 提供机器可读的对照表。
+
+## 已入库的来源（当前 3 个，全部可再分发，零 copyleft）
+
+| 来源 | 许可 | 说明 |
+|---|---|---|
+| `shuowenjiezi/shuowen`（说文检索数据） | **Apache-2.0** | 须保留许可与 NOTICE（`LICENSES/Apache-2.0.txt`），并注明改动 |
+| 康熙字典数据（`samsonhoi/kangxi-dictionary`） | **MIT** | 须保留版权与许可声明（`LICENSES/MIT-samsonhoi-kangxi-dictionary.txt`） |
+| `daizhige-org/daizhigev20` 小学书 | **Public-Domain** | 39 本《说文》三本正文与传统小学书；**逐书核对过来源**，无一来自维基文库 |
+
+**白名单**：只允许 `Apache-2.0` / `MIT` / `CC0-1.0` / `Unicode-3.0` /
+`CC-BY-4.0` / `ODC-By-1.0` / `Public-Domain`。
+**明确排除**：`CC-BY-SA`（share-alike 传染）、`CC-BY-NC`、`CC-BY-ND`、
+`GPL` / `LGPL` / `EPL` / `MPL`。`src/verify_relations.py` 强制执行，退出码 1 即不合规。
+
+## `Public-Domain` 这个标识
+
+只用于「公有领域古籍的忠实录入」：上游没有 LICENSE 文件（`license: null`），
+但内容本身是成书于 1929 年前的公版作品，忠实录入不产生新版权。
+**用这个标识的前提是逐书核对过来源**：必须确认该书**不是**从维基文库（CC BY-SA 4.0）
+等 copyleft 源导入的。v1 的核对结论与逐书清单写在 `data/sources.jsonl` 的 `notes` 里；
+校验器 `L5` 强制：标为 `Public-Domain` 的来源，`notes` 必须写明逐书核对、
+`attribution` 不得为空。
+
+## 考虑过但**未入库**的来源
+
+下列来源**内容不在本仓库**，本库也没有引用它们的任何片段，
+所以它们**不在 `data/sources.jsonl` 里登记**（登记了反而是噪音）。
+之所以记在这里，是说明「为什么没收」：
+
+| 来源 | 条款要点 | 本仓库的处理 |
+|---|---|---|
+| ctext.org | bulk RDF 标 **CC BY-NC-SA 3.0**；站内明文「嚴禁使用自動下載軟体」，对自动请求返 403 | 不入库；仅指针。人工核对时也只取单页、不做自动抓取 |
+| 漢字叔叔 hanziyuan.net | 页脚 `Copyright © 1994 - 2017 Richard Sears ... All rights received.`；无许可文件 | 不入库；仅指针 |
+| 教育部《異體字字典》 | 教育部「國語辭典公眾授權網」未列本词典；其 form-data 政策另有限制 | 不入库；仅指针 |
+| 教育部《重編國語辭典修訂本》等四部 | **CC BY-ND 3.0**（禁止改作） | 不入库；仅指针 |
+| 北京師大《說文解字》研究與應用平台 | 站点未标明数据许可 | 不入库；仅指针 |
+| BabelStone IDS | 许可未明示 | 不入库；仅指针 |
+
+「只存指针」的含义：若某来源将来要引入，它在 `data/sources.jsonl` 里登记为
+`redistributable: false`、`kind: "pointer"`；`relations` 里可以出现指向它的
+`evidence_url`，但**不存其原文**，只允许存本仓库**自己撰写**的摘要
+（须填 `summary_method` + `reviewer` + `review_date`，校验器做 8-gram 重叠自检）。
+
+**不得给下游附加额外限制**（例如「仅限非商业」「禁止再分发」）：
+对 CC0 材料尤其如此——CC0 是放弃权利，不是许可别人加条件。
+
+---
+
+本仓库自己的**代码**（`src/**`、`viewer/**`）与**文档**（`README.md`、`AGENTS.md`、
+`THIRD_PARTY_NOTICES.md`、本文件）采用 **CC0 1.0**（公有领域奉献）：
+不署名、不注明改动、无任何义务，随便用。协议全文见根 `LICENSE`（与 `LICENSE-DOCS` 同文），
+主页：https://creativecommons.org/publicdomain/zero/1.0/
+
+本仓库**没有**对下游附加任何额外限制。

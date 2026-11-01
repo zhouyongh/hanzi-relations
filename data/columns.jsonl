@@ -1,0 +1,4 @@
+{"column_id": "kangxi_dict", "role": "core", "provides": ["gloss", "citation"], "aggregation": "aggregate", "tier": "base", "bundle": "base", "note": "《康熙字典》說解 + 條目內嵌引文。"}
+{"column_id": "shuowen_duan_yucai", "role": "core", "provides": ["commentary", "citation", "reading"], "aggregation": "aggregate", "tier": "base", "bundle": "base", "note": "段玉裁注。parent_statement_id 回指所注的說文原文陳述。"}
+{"column_id": "shuowen_xu_shen", "role": "core", "provides": ["gloss", "reading", "radical", "variant", "citation"], "aggregation": "aggregate", "tier": "base", "bundle": "base", "note": "許慎原文（大徐本正文）。本庫主軸：說文系各列的字頭即主軸行。（含重文/古文的 variant_note 與引文 citation，故 provides 須含 variant/citation。）"}
+{"column_id": "xiaoxue_尔雅", "role": "core", "provides": ["gloss"], "aggregation": "aggregate", "tier": "base", "bundle": "base", "note": "傳統小學書正文。字頭掛在《說文》字頭上。"}

@@ -1,0 +1,59 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/radicals.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "说文 606 部 + 康熙 214 部。**归属走边，检字法走陈述**。",
+  "properties": {
+    "char": {
+      "description": "部首字",
+      "type": "string"
+    },
+    "evidence_url": {
+      "description": "出处 URL",
+      "type": "string"
+    },
+    "index": {
+      "description": "部号",
+      "type": "integer"
+    },
+    "license": {
+      "description": "许可",
+      "type": "string"
+    },
+    "note": {
+      "description": "说明",
+      "type": "string"
+    },
+    "radical": {
+      "description": "部名",
+      "type": "string"
+    },
+    "source_id": {
+      "description": "来源 id",
+      "type": "string"
+    },
+    "strokes": {
+      "description": "部首字笔画数（康熙部有）",
+      "type": "integer"
+    },
+    "system": {
+      "enum": [
+        "shuowen",
+        "kangxi"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "system",
+    "radical",
+    "index",
+    "char",
+    "license",
+    "source_id",
+    "evidence_url"
+  ],
+  "schema_version": 2,
+  "title": "部首（radicals）",
+  "type": "object"
+}

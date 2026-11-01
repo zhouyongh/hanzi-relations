@@ -1,0 +1,9 @@
+本仓库自己写的代码与页面（`src/**`、`viewer/**`）以 **CC0 1.0** 释出：
+不署名、不注明改动、无任何义务，商用、改作、闭源再分发都可以。
+
+CC0 1.0 全文见根 `LICENSE`（与 `LICENSE-DOCS` 同文）；协议主页：
+https://creativecommons.org/publicdomain/zero/1.0/
+
+注意：`viewer/*.html` 是**生成的页面**，其中内嵌的数据正文来自 `data/`，
+那些正文仍按各自来源的许可使用（见 `data/sources.jsonl` 与 `THIRD_PARTY_NOTICES.md`）；
+CC0 只覆盖页面代码、模板与样式，不改变第三方数据本身的许可。

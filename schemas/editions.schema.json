@@ -1,0 +1,41 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/editions.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "axis 区分 annotator（注家）与 edition（刻本），**不可混称**。",
+  "properties": {
+    "axis": {
+      "enum": [
+        "annotator",
+        "edition"
+      ],
+      "type": "string"
+    },
+    "edition_id": {
+      "description": "版本形态 id（列 id）",
+      "type": "string"
+    },
+    "name": {
+      "description": "名称",
+      "type": "string"
+    },
+    "note": {
+      "description": "说明",
+      "type": "string"
+    },
+    "work_id": {
+      "description": "作品 id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "edition_id",
+    "work_id",
+    "axis",
+    "name",
+    "note"
+  ],
+  "schema_version": 2,
+  "title": "注家形态（editions）",
+  "type": "object"
+}

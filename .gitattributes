@@ -1,0 +1,2 @@
+# 一律 LF：JSONL/HTML 都是数据与派发件，CRLF 会让 sha256 与 --check 结果随平台变
+* text=auto eol=lf

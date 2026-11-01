@@ -1,0 +1,51 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/structures.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "构形值域登记表。**不含 license / source_id**——由 namespace(=source_id) join。",
+  "properties": {
+    "derived_from": {
+      "description": "派生来源",
+      "type": "string"
+    },
+    "key": {
+      "description": "上游的 key",
+      "type": "string"
+    },
+    "namespace": {
+      "description": "命名空间（= 来源 id，key 是上游自己的 key）",
+      "type": "string"
+    },
+    "structure_id": {
+      "pattern": "^structure:[^:]+:.+$",
+      "type": "string"
+    },
+    "transform": {
+      "description": "加工方式",
+      "type": "string"
+    },
+    "value": {
+      "description": "构形值（如 `d(白,干)`）",
+      "type": "string"
+    },
+    "value_kind": {
+      "description": "值的语义类别（封闭枚举）",
+      "enum": [
+        "ids"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "structure_id",
+    "namespace",
+    "key",
+    "value",
+    "value_kind",
+    "derived_from",
+    "transform"
+  ],
+  "schema_version": 2,
+  "title": "构形登记项（structures）",
+  "type": "object"
+}

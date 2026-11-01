@@ -1,0 +1,64 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/relations.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "边只连实体、不带许可。许可在陈述上。",
+  "properties": {
+    "from": {
+      "description": "起点，形如 `char:C000001` / `statement:S000001` / `radical:kangxi:1`",
+      "type": "string"
+    },
+    "kind": {
+      "description": "边的子类（取值受 `RELATION_KINDS` 约束）",
+      "type": "string"
+    },
+    "relation_id": {
+      "description": "边 id",
+      "pattern": "^R\\d{6,7}$",
+      "type": "string"
+    },
+    "statement_ids": {
+      "description": "支撑这条边的陈述 id 列表（`variant_of` 等必填）",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "to": {
+      "description": "终点，形如 `statement:S000001` / `char:C000001` / `reading:<edition>:<slug>`",
+      "type": "string"
+    },
+    "type": {
+      "description": "关系类型（封闭枚举）",
+      "enum": [
+        "asserts",
+        "commentary_on",
+        "variant_of",
+        "glyph",
+        "radical",
+        "radical_owner",
+        "radical_contains",
+        "phonology",
+        "structure",
+        "citation",
+        "cited_in",
+        "cites_work",
+        "edition_of",
+        "quotes",
+        "edition_variant",
+        "component",
+        "phonetic_component"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "relation_id",
+    "type",
+    "from",
+    "to"
+  ],
+  "schema_version": 2,
+  "title": "边（relations）",
+  "type": "object"
+}

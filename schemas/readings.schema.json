@@ -1,0 +1,77 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/readings.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "读音值域登记表。**不含 license / source_id**——由 edition_id join。",
+  "properties": {
+    "derived_from": {
+      "description": "派生来源",
+      "type": "string"
+    },
+    "edition_id": {
+      "description": "版本形态 id → editions → sources（许可 join 路径）",
+      "type": "string"
+    },
+    "locations": {
+      "description": "定位码列表",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "normalized": {
+      "description": "归一化值——**跨 edition 同音连接的键**",
+      "type": "string"
+    },
+    "reading_id": {
+      "pattern": "^reading:[^:]+:.+$",
+      "type": "string"
+    },
+    "slug": {
+      "description": "值域内的 slug（目标里用的那段）",
+      "type": "string"
+    },
+    "tone": {
+      "description": "声调；**判不出是 null 不是 0**（韵类/反切/编码恒 null）",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "transform": {
+      "description": "加工方式",
+      "type": "string"
+    },
+    "value": {
+      "description": "原始值",
+      "type": "string"
+    },
+    "value_kind": {
+      "description": "值的语义类别（封闭枚举）",
+      "enum": [
+        "reading",
+        "reading_list",
+        "location_reading",
+        "fanqie",
+        "rhyme_class",
+        "code"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "reading_id",
+    "edition_id",
+    "value",
+    "slug",
+    "value_kind",
+    "normalized",
+    "tone",
+    "locations",
+    "derived_from",
+    "transform"
+  ],
+  "schema_version": 2,
+  "title": "读音登记项（readings）",
+  "type": "object"
+}

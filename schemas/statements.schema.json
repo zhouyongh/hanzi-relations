@@ -1,0 +1,135 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/statements.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "事实单元。许可、证据、出处都在陈述上；边不带许可。",
+  "properties": {
+    "char_id": {
+      "description": "挂在哪个字头上",
+      "type": "string"
+    },
+    "confidence": {
+      "enum": [
+        "machine",
+        "reviewed",
+        "curated"
+      ],
+      "type": "string"
+    },
+    "edition_id": {
+      "description": "版本形态 id（列 = 一个 edition_id）",
+      "type": "string"
+    },
+    "evidence_url": {
+      "description": "出处 URL——**无出处不入库**（硬规则 1）",
+      "type": "string"
+    },
+    "kind": {
+      "description": "陈述的语义类别（封闭枚举）",
+      "enum": [
+        "gloss",
+        "note",
+        "commentary",
+        "citation",
+        "variant_note",
+        "phonology",
+        "frequency",
+        "radical_lookup",
+        "structure",
+        "serial",
+        "radical_compare",
+        "radical_alt"
+      ],
+      "type": "string"
+    },
+    "license": {
+      "description": "本条陈述的许可（逐条记，不搞整库一个许可）",
+      "type": "string"
+    },
+    "locator": {
+      "description": "上游定位信息（自由结构）",
+      "type": "object"
+    },
+    "parent_statement_id": {
+      "description": "所注的原文陈述（段注回指说文）",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "radical": {
+      "description": "部首（可能为空串）",
+      "type": "string"
+    },
+    "reading": {
+      "description": "读音 / 反切（可能为空串）",
+      "type": "string"
+    },
+    "review_date": {
+      "description": "复核日期",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reviewer": {
+      "description": "复核人",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_id": {
+      "description": "来源 id → `data/sources.jsonl`",
+      "type": "string"
+    },
+    "stable_id": {
+      "description": "**内容地址**：重建后不变，可被外部引用（见 D45）",
+      "pattern": "^st_[0-9a-f]{24}(-\\d+)?$",
+      "type": "string"
+    },
+    "statement_id": {
+      "description": "陈述 id（事实单元）",
+      "pattern": "^S\\d{6,7}$",
+      "type": "string"
+    },
+    "summary_method": {
+      "description": "自撰摘要的方法（指针型来源必填）",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "text": {
+      "description": "正文",
+      "type": "string"
+    },
+    "work_id": {
+      "description": "作品 id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "statement_id",
+    "stable_id",
+    "kind",
+    "char_id",
+    "work_id",
+    "edition_id",
+    "text",
+    "reading",
+    "radical",
+    "parent_statement_id",
+    "locator",
+    "evidence_url",
+    "license",
+    "source_id",
+    "confidence",
+    "summary_method",
+    "reviewer",
+    "review_date"
+  ],
+  "schema_version": 2,
+  "title": "陈述（statements）",
+  "type": "object"
+}

@@ -1,0 +1,74 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/rhyme_groups.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "《廣韻》小韵 3,884 + 韵目 206。",
+  "properties": {
+    "char_count": {
+      "description": "该韵目的字数",
+      "type": "integer"
+    },
+    "evidence_url": {
+      "description": "出处 URL",
+      "type": "string"
+    },
+    "fanqie": {
+      "description": "反切",
+      "type": "string"
+    },
+    "group_id": {
+      "description": "组 id",
+      "type": "string"
+    },
+    "license": {
+      "description": "许可",
+      "type": "string"
+    },
+    "rhyme": {
+      "description": "韵目",
+      "type": "string"
+    },
+    "rhyme_class": {
+      "description": "小韵类",
+      "type": "string"
+    },
+    "source_id": {
+      "description": "来源 id",
+      "type": "string"
+    },
+    "system": {
+      "enum": [
+        "guangyun_xiao",
+        "guangyun_rhyme"
+      ],
+      "type": "string"
+    },
+    "tone_classes": {
+      "description": "声调类别",
+      "type": "string"
+    },
+    "xiao_count": {
+      "description": "该小韵的字数",
+      "type": "integer"
+    },
+    "xiao_index": {
+      "description": "小韵号",
+      "type": "string"
+    }
+  },
+  "required": [
+    "system",
+    "group_id",
+    "rhyme",
+    "rhyme_class",
+    "fanqie",
+    "xiao_index",
+    "char_count",
+    "license",
+    "source_id",
+    "evidence_url"
+  ],
+  "schema_version": 2,
+  "title": "韵类 / 韵目（rhyme_groups）",
+  "type": "object"
+}

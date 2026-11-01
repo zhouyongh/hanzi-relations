@@ -1,0 +1,184 @@
+{
+  "files": [
+    {
+      "bytes": 13787677,
+      "lines": 57917,
+      "path": "data/characters/part-00001.jsonl",
+      "sha256": "0fc2c27bd62a043ccc74a38d0cb1cd5062a8eaea48ef7450a7f66adc74d453f9"
+    },
+    {
+      "bytes": 1035,
+      "lines": 4,
+      "path": "data/columns.jsonl",
+      "sha256": "170f8e69bc617e5a5a520c16dc71ad9b85e9433a5ab9cf0d7395ded4059ce0d7"
+    },
+    {
+      "bytes": 679,
+      "lines": 4,
+      "path": "data/editions.jsonl",
+      "sha256": "86adb3fa6a044b33718d386c2637745a800dc04fcdb55e9d3522c006b0f49b5f"
+    },
+    {
+      "bytes": 1171,
+      "lines": 2,
+      "path": "data/known_gaps.jsonl",
+      "sha256": "bc51d07ecd455affb1d0c796333a3b8924686071a21a0c0bfae018461beeba7d"
+    },
+    {
+      "bytes": 817142,
+      "lines": 1388,
+      "path": "data/provenance/daizhige_xiaoxue_books/part-00001.jsonl",
+      "sha256": "029dea02c2eb1128c80a5c12ae87a963be1f4ef70c5b1b53b4de9eb840721232"
+    },
+    {
+      "bytes": 39845713,
+      "lines": 56075,
+      "path": "data/provenance/kangxi_dict/part-00001.jsonl",
+      "sha256": "d97b49eec44aa54a7ee6f0963ffbc742e35f544d1b379c3a1c92c823ba95212c"
+    },
+    {
+      "bytes": 39845764,
+      "lines": 57944,
+      "path": "data/provenance/kangxi_dict/part-00002.jsonl",
+      "sha256": "ecc4074d888a3c0b993946aa3beb79bdb1c0cb0e5fe31f10126332371fba15ca"
+    },
+    {
+      "bytes": 16622920,
+      "lines": 24626,
+      "path": "data/provenance/kangxi_dict/part-00003.jsonl",
+      "sha256": "a1f266c69dbaebf5df06b215adf7ba49508d37e99e83af9962464c8ea065aecf"
+    },
+    {
+      "bytes": 34666092,
+      "lines": 55988,
+      "path": "data/provenance/shuowenjiezi_shuowen/part-00001.jsonl",
+      "sha256": "69cfb557375442ce75be4168d3a131fbe84ae8937e3bc7d4bcec452108fef926"
+    },
+    {
+      "bytes": 101614,
+      "lines": 540,
+      "path": "data/radicals.jsonl",
+      "sha256": "fa55c320df9552a355688e07a02ab8ebe57e3306197a2f6214ed8d95622b5673"
+    },
+    {
+      "bytes": 0,
+      "lines": 0,
+      "path": "data/readings.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 19769397,
+      "lines": 200000,
+      "path": "data/relations/part-00001.jsonl",
+      "sha256": "7222389e9610d090fc3019b46333076ac92a8c274ea3c3e661f3e65b8d6c5491"
+    },
+    {
+      "bytes": 18572251,
+      "lines": 171276,
+      "path": "data/relations/part-00002.jsonl",
+      "sha256": "57cfb58fb8e0a39a4a99d4525dd70509cf79e7318ea7f955f90a7a891d4c800d"
+    },
+    {
+      "bytes": 0,
+      "lines": 0,
+      "path": "data/rhyme_groups.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "lines": 0,
+      "path": "data/source_tags.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 2517,
+      "lines": 3,
+      "path": "data/sources.jsonl",
+      "sha256": "95db22ffd1764b2086f9f1799139b93d776d94f83b1bbfc5a65f73041bfca8c9"
+    },
+    {
+      "bytes": 0,
+      "lines": 0,
+      "path": "data/structures.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 2051,
+      "lines": 79,
+      "path": "schemas/characters.schema.json",
+      "sha256": "9944505922670be79c51d8b39ae91073eedfd82c6d7e703fb8b7009a4d106c80"
+    },
+    {
+      "bytes": 2084,
+      "lines": 89,
+      "path": "schemas/columns.schema.json",
+      "sha256": "471c628d54a675b638f76f7c272904bc47b7e33ca5f35e7b4e669f111c261d30"
+    },
+    {
+      "bytes": 903,
+      "lines": 41,
+      "path": "schemas/editions.schema.json",
+      "sha256": "1b7034de3170b587949dc191bbf589497cc54c83a288b0c73fe56505a438fc44"
+    },
+    {
+      "bytes": 1261,
+      "lines": 59,
+      "path": "schemas/radicals.schema.json",
+      "sha256": "f6056db77a7951cc8d8af98f3c4262f45f862f76793f0dd8e4ace1f0d47f28f6"
+    },
+    {
+      "bytes": 1864,
+      "lines": 77,
+      "path": "schemas/readings.schema.json",
+      "sha256": "3edd800e03a69580eaa11301f689708158cb2265bf2f49b6250b55cece8d1cc0"
+    },
+    {
+      "bytes": 1629,
+      "lines": 64,
+      "path": "schemas/relations.schema.json",
+      "sha256": "3f532cc142b435fbd3b69e401bb920c96ba2adde1dccc8c65a00e7cd1148893a"
+    },
+    {
+      "bytes": 1577,
+      "lines": 74,
+      "path": "schemas/rhyme_groups.schema.json",
+      "sha256": "afb271dae7dbdbd7a539d619329aaca9181790413d399177a0dfa8e27ede7f7c"
+    },
+    {
+      "bytes": 915,
+      "lines": 41,
+      "path": "schemas/source_tags.schema.json",
+      "sha256": "0c0590c0a9362ef9fd2ea51cc6b4bc9d2c7f72c62b1511349f741d4a56c24b1e"
+    },
+    {
+      "bytes": 1515,
+      "lines": 63,
+      "path": "schemas/sources.schema.json",
+      "sha256": "8b23dc9e797dc552a447bbfc965a30e12142dbef3296b8ad432101e632635f3d"
+    },
+    {
+      "bytes": 3160,
+      "lines": 135,
+      "path": "schemas/statements.schema.json",
+      "sha256": "aedba771ae1f59273f1a3ab2e3f03724ef73707842be0346099dff3051b0786f"
+    },
+    {
+      "bytes": 1263,
+      "lines": 51,
+      "path": "schemas/structures.schema.json",
+      "sha256": "ddd802351209f2538e972490089b449de7885c1694a5a8d69f66a74ea4c00a1c"
+    }
+  ],
+  "generated_at": "2026-11-01T09:09:34.638562+00:00",
+  "schema_version": 2,
+  "scope": [
+    "data",
+    "schemas"
+  ],
+  "sqlite_schema_version": 3,
+  "totals": {
+    "bytes": 184052194,
+    "files": 28,
+    "lines": 626540
+  }
+}

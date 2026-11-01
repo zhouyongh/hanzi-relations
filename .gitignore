@@ -1,0 +1,9 @@
+# 派生件与中间件（不入库）
+/hanzi-relations.db
+/build.json
+/db/
+/tmp/
+__pycache__/
+*.pyc
+data/_*.txt
+*.log

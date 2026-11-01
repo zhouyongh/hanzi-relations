@@ -1,0 +1,89 @@
+{
+  "$id": "https://hanzi-relations.local/schemas/columns.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "**产物**：由 `src/build_columns.py` 的裁定表生成。只存设计声明；work_id/axis/license 由 editions/sources join。",
+  "properties": {
+    "aggregation": {
+      "description": "aggregate / reachability（二值策略）",
+      "enum": [
+        "aggregate",
+        "reachability"
+      ],
+      "type": "string"
+    },
+    "bundle": {
+      "description": "物理分库名：base / shuowen / xiaoxue / classics / unihan / misc",
+      "enum": [
+        "base",
+        "shuowen",
+        "xiaoxue",
+        "classics",
+        "unihan",
+        "misc"
+      ],
+      "type": "string"
+    },
+    "column_id": {
+      "description": "列 id（== edition_id：一列 = 一个 edition_id）",
+      "type": "string"
+    },
+    "note": {
+      "description": "说明",
+      "type": "string"
+    },
+    "provides": {
+      "description": "该列提供的语义维度",
+      "items": {
+        "enum": [
+          "gloss",
+          "commentary",
+          "note",
+          "citation",
+          "occurrence",
+          "reading",
+          "rhyme",
+          "variant",
+          "structure",
+          "radical",
+          "lookup",
+          "frequency",
+          "serial",
+          "alignment"
+        ],
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "role": {
+      "description": "core / optional / support",
+      "enum": [
+        "core",
+        "optional",
+        "support"
+      ],
+      "type": "string"
+    },
+    "tier": {
+      "description": "base（默认 4 列）/ standard（主干对照）/ extended（按需勾选）",
+      "enum": [
+        "base",
+        "standard",
+        "extended"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "column_id",
+    "role",
+    "provides",
+    "aggregation",
+    "tier",
+    "bundle",
+    "note"
+  ],
+  "schema_version": 2,
+  "title": "列登记表（columns）",
+  "type": "object"
+}
