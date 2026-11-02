@@ -1,4 +1,4 @@
-﻿# 字形指针契约（v1）
+# 字形指针契约（v1）
 
 本仓库**不存字形文件**，只存指向兄弟仓 [`hanzi-glyphs-svg`](https://github.com/zhouyongh/hanzi-glyphs-svg) 的指针边。
 

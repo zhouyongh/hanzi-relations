@@ -1,4 +1,4 @@
-﻿# AGENTS.md — hanzi-relations（base 版）
+# AGENTS.md — hanzi-relations（base 版）
 
 汉字**引用关系库**：以字为索引，把各部典籍对同一个字的解释、彼此的版本差异，以及
 字与字形 / 部首 / 音韵 / 异体的关系，结构化成**可机读、可追溯**的引用关系。
