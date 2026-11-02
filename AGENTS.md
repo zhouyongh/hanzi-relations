@@ -1,9 +1,11 @@
-# AGENTS.md — hanzi-relations（base 版）
+﻿# AGENTS.md — hanzi-relations（base 版）
 
 汉字**引用关系库**：以字为索引，把各部典籍对同一个字的解释、彼此的版本差异，以及
 字与字形 / 部首 / 音韵 / 异体的关系，结构化成**可机读、可追溯**的引用关系。
 
 本仓库只做**关系与引用**。字形文件在 `hanzi-glyphs-svg`，本仓库只存指向它的指针。
+
+字形指针格式、已发布层与 G-identity 见 [docs/glyph-pointer-contract.md](docs/glyph-pointer-contract.md)；实现与白名单在 `src/glyph_pointer.py`。
 
 ## 版本边界（v1）
 

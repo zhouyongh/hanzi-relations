@@ -8,7 +8,7 @@
   L. 许可闸门   —— 陈述的 license 必须等于其来源登记的 license；
                     redistributable=false 的来源不得有内容入库；
                     指针来源的摘要必须填 summary_method
-  G. 字形指针   —— glyph 边的目标文件存在（只对已发布层）
+  G. 字形指针   —— 格式/已发布层；文件存在；G-identity（码位/modern_char）
   P. provenance —— data/provenance/<source_id>.jsonl 与 statements 一致
 """
 from __future__ import annotations
@@ -31,6 +31,7 @@ import structures as structures_mod  # noqa: E402
 import schema as schema_mod  # noqa: E402
 import stable_id as stable_id_mod  # noqa: E402
 import known_gaps as gaps_mod  # noqa: E402
+import glyph_pointer as glyph_pointer_mod  # noqa: E402
 
 DATA = os.path.join(ROOT, "data")
 PROV = os.path.join(DATA, "provenance")
@@ -817,34 +818,43 @@ def main() -> int:
 
     # ---------- G. 字形指针 ----------
     # 字形文件在**兄弟仓库** `hanzi-glyphs-svg`（公开：zhouyongh/hanzi-glyphs-svg）。
-    # 本仓库只存指针：指针的**格式**与**层是否已发布**在这里核；
-    # 「文件在不在」要拿到兄弟仓库才谈得上——拿不到就**整体跳过**，不是报错。
-    #
-    # 为什么可以跳过：兄弟仓库不在本仓库的控制范围内，它的缺席不是本仓库的
-    # 数据错误。**但必须说清楚跳过了多少条**，否则「校验通过」会被误读成
-    # 「21,508 条指针都核过了」——那才是真的误导。
+    # 本仓库只存指针：
+    #   G1 格式  glyph:<repo>:<layer>:<key>
+    #   G2 层 ∈ 已发布白名单（单一事实源：glyph_pointer.PUBLISHED_LAYERS）
+    #   G3 文件存在（兄弟仓可得时）
+    #   G4 G-identity：index.csv 的 unicode（优先）或 modern_char 必须对准字头
+    #      —— 不做异体映射。兄弟仓或 index 不可得时 G3/G4 **跳过并明示**，不得假绿。
     glyph_repo = (args.glyph_repo
                   or os.environ.get("HANZI_GLYPHS_SVG")
                   or os.path.join(os.path.dirname(ROOT), "hanzi-glyphs-svg"))
     glyph_checked = glyph_missing = glyph_total = 0
-    published_layers = {"oracle", "seal"}   # v1 只对已公开发布的两层建边
+    identity_checked = identity_mismatch = 0
+    identity_skipped = False
+    published_layers = set(glyph_pointer_mod.PUBLISHED_LAYERS)
     glyph_avail = os.path.isdir(os.path.join(glyph_repo, "glyphs"))
+    layer_indexes: dict[str, dict] = {}
+    if glyph_avail:
+        for layer in sorted(published_layers):
+            layer_indexes[layer] = glyph_pointer_mod.load_layer_index(glyph_repo, layer)
+        if not any(layer_indexes.values()):
+            identity_skipped = True
+            warn("G4", "字形仓在，但已发布层的 index.csv 都读不到——G-identity 跳过（非假绿）")
+
     for r in relations:
         if r.get("type") != "glyph":
             continue
         glyph_total += 1
-        _, _, payload = r["to"].partition(":")
-        parts = payload.split(":")
-        if len(parts) != 3:
-            err("G1", f"边 {r.get('relation_id')} 的 glyph 目标格式非法：{r['to']}")
+        parsed = glyph_pointer_mod.parse_glyph_target(r.get("to") or "")
+        if not parsed:
+            err("G1", f"边 {r.get('relation_id')} 的 glyph 目标格式非法：{r.get('to')}")
             continue
-        repo, layer, key = parts
+        repo, layer, key = parsed
         if layer not in published_layers:
             err("G2", f"边 {r.get('relation_id')} 指向未发布的字形层 {layer}"
                       f"（v1 只允许 {sorted(published_layers)}）")
             continue
         if not glyph_avail:
-            continue          # 兄弟仓库不在 → 这一段整体跳过（见上）
+            continue
         path = os.path.join(glyph_repo, "glyphs", layer, f"{key}.svg")
         if not os.path.exists(path):
             glyph_missing += 1
@@ -852,6 +862,33 @@ def main() -> int:
                 err("G3", f"边 {r.get('relation_id')} 的字形文件不存在：{path}")
         else:
             glyph_checked += 1
+
+        # G4 identity
+        idx = layer_indexes.get(layer) or {}
+        if not idx:
+            continue
+        index_row = idx.get(key)
+        if not index_row:
+            identity_mismatch += 1
+            if identity_mismatch <= 5:
+                err("G4", f"边 {r.get('relation_id')} 的键 {layer}:{key} 不在 index.csv")
+            continue
+        cid = (r.get("from") or "").split(":", 1)[-1]
+        char_row = char_by_id.get(cid)
+        if not char_row:
+            identity_mismatch += 1
+            if identity_mismatch <= 5:
+                err("G4", f"边 {r.get('relation_id')} 的字头 {cid} 不存在，无法做 G-identity")
+            continue
+        ok, reason = glyph_pointer_mod.identity_match(char_row, index_row)
+        identity_checked += 1
+        if not ok:
+            identity_mismatch += 1
+            if identity_mismatch <= 10:
+                err("G4", f"边 {r.get('relation_id')} G-identity 失败（{reason}）："
+                          f"字头 {char_row.get('head')!r}/{char_row.get('modern_codepoints')!r} "
+                          f"↛ {layer}:{key} modern={index_row.get('modern_char')!r} "
+                          f"unicode={index_row.get('unicode')!r}")
 
     # ---------- 报告 ----------
     print("=" * 62)
@@ -866,11 +903,15 @@ def main() -> int:
     print(f"provenance 文件   : {len(prov_files)}")
     if glyph_avail:
         print(f"字形指针已核      : {glyph_checked} / {glyph_total}（缺失 {glyph_missing}）")
+        if identity_skipped:
+            print("G-identity         : **跳过**（无 index.csv）")
+        else:
+            print(f"G-identity         : {identity_checked} 条已核，失败 {identity_mismatch}")
     else:
-        print(f"字形指针          : **跳过**（{glyph_total} 条未核验）")
+        print(f"字形指针          : **跳过**（{glyph_total} 条未核验文件/身份）")
         print(f"                    字形仓库不可得：{glyph_repo}")
         print("                    指针的格式与层是否已发布仍已校验；"
-              "「文件是否存在」要拿到兄弟仓库才谈得上。")
+              "「文件是否存在 / G-identity」要拿到兄弟仓库才谈得上。")
         print("                    CI 里用 sparse-checkout 取 zhouyongh/hanzi-glyphs-svg 即可恢复。")
     print()
     if warnings:
