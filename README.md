@@ -12,7 +12,7 @@
 |---|---|
 | 字头 | 57,917 |
 | 条目（原文、注、引文、反切） | 196,021 |
-| 关系 | 371,276 |
+| 关系 | 372,031 |
 | 部首 | 540（《說文》全部） |
 | 体积 | JSONL 176.8 MiB · SQLite 216 MiB |
 
@@ -32,7 +32,7 @@
 
 | 形式 | 位置 | 说明 |
 |---|---|---|
-| SQLite | `hanzi-relations.db` | 215 MiB，见 [Releases](https://github.com/zhouyongh/hanzi-relations/releases)（推荐） |
+| SQLite | `hanzi-relations.db` | 216 MiB，见 [Releases](https://github.com/zhouyongh/hanzi-relations/releases)（推荐） |
 | JSONL | `data/` | 全量事实，一来源一目录 |
 | 浏览页 | `viewer/index.html` | 单文件，离线可用 |
 

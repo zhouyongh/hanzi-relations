@@ -146,8 +146,8 @@ def build_one(name: str) -> dict:
                     "(SELECT statement_id FROM statements)")
 
         # ---- 边 ----
-        # 只要**有一端在本库**就留下（跨 bundle 的那几族边：commentary_on 545 /
-        # quotes 8,758 / edition_variant 10,621——按「两端都在」筛会整族丢掉，
+        # 只要**有一端在本库**就留下（跨 bundle 的边族：commentary_on 22,897 /
+        # quotes 9,059（v1 无 edition_variant）——按「两端都在」筛会整族丢掉，
         # 而单库查不出问题、合并查永远看不到）。
         #
         # 另有**两端都是实体**的边（与某个字头无关，只挂在部首层上）：

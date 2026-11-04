@@ -52,7 +52,8 @@ PLACEHOLDERS = ("□", "▢", "■", "□")
 GAP_KINDS = ("placeholder_char_head", "duplicate_statements",
              "kangxi_split_parent_citations", "xu_kai_missing_fanqie_head",
              "xu_kai_split_parent_notes", "duan_ben_merged_entries",
-             "kangxi_variant_prose_without_edge")
+             "kangxi_variant_prose_without_edge",
+             "shuowen_upstream_reconciliation")
 
 #: 段注本正文里「下一条条目的字头 + 拼音」：`唐tánɡ` / `棠tánɡ` / `桂ɡuìp240上`。
 #: 一条陈述自己的字头**不在正文里**，所以正文里出现这种串就是它把下一条也吞进来了。
@@ -283,6 +284,21 @@ def _measure_kangxi_variant_prose_without_edge() -> tuple[int, int]:
     return missing, hits
 
 
+def _measure_shuowen_reconciliation() -> tuple[int, int, int]:
+    """说文层与上游检索数据的对账现状：
+    返回 (有上游号的行数, 空码位行数, 说文总行数)。"""
+    n_up = n_nocp = n_all = 0
+    for r in read_jsonl_any(os.path.join(DATA, "characters")):
+        if r.get("work_id") != "shuowen":
+            continue
+        n_all += 1
+        if r.get("upstream_id") is not None:
+            n_up += 1
+        if not (r.get("modern_codepoints") or []):
+            n_nocp += 1
+    return n_up, n_nocp, n_all
+
+
 def probe(gap: dict) -> tuple[bool, str]:
     """重测一条缺口，返回 `(是否与登记一致, 实测描述)`。"""
     kind = gap.get("kind")
@@ -336,6 +352,16 @@ def probe(gap: dict) -> tuple[bool, str]:
         ok = (exp_m is None or missing == exp_m) and (exp_h is None or hits == exp_h)
         return ok, (f"《康熙》正文「古作 X」共 {hits} 处，其中 {missing} 处没有 `variant_of` 边"
                     f"（登记：{exp_h} 处 / {exp_m} 处无边）")
+    if kind == "shuowen_upstream_reconciliation":
+        n_up, n_nocp, n_all = _measure_shuowen_reconciliation()
+        exp_up = gap.get("expected_rows_with_upstream_id")
+        exp_nc = gap.get("expected_rows_without_codepoints")
+        exp_all = gap.get("expected_rows_total")
+        ok = ((exp_up is None or n_up == exp_up)
+              and (exp_nc is None or n_nocp == exp_nc)
+              and (exp_all is None or n_all == exp_all))
+        return ok, (f"說文行 {n_all:,}（帶上游號 {n_up:,} / 空碼位 {n_nocp}）"
+                    f"（登記：總 {exp_all:,} / 帶號 {exp_up:,} / 空碼位 {exp_nc}）")
 
 
 def check_all() -> list[str]:

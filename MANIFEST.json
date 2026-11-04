@@ -19,10 +19,10 @@
       "sha256": "86adb3fa6a044b33718d386c2637745a800dc04fcdb55e9d3522c006b0f49b5f"
     },
     {
-      "bytes": 1171,
-      "lines": 2,
+      "bytes": 1941,
+      "lines": 3,
       "path": "data/known_gaps.jsonl",
-      "sha256": "bc51d07ecd455affb1d0c796333a3b8924686071a21a0c0bfae018461beeba7d"
+      "sha256": "2e034742818f42cc9ccd01ae0ffa9c38b52acf4e1e304609fca8c60e79dfe555"
     },
     {
       "bytes": 817142,
@@ -49,10 +49,10 @@
       "sha256": "a1f266c69dbaebf5df06b215adf7ba49508d37e99e83af9962464c8ea065aecf"
     },
     {
-      "bytes": 36003733,
+      "bytes": 35996653,
       "lines": 55988,
       "path": "data/provenance/shuowenjiezi_shuowen/part-00001.jsonl",
-      "sha256": "2d705299da5ce64874a5d0d35242e7d98fa46d5f80185f220f092c530990143b"
+      "sha256": "1ff4188dac4e762093752c05e1ba977f8d7c6df173c97d5b57d6365c555e8cd9"
     },
     {
       "bytes": 101614,
@@ -169,7 +169,7 @@
       "sha256": "ddd802351209f2538e972490089b449de7885c1694a5a8d69f66a74ea4c00a1c"
     }
   ],
-  "generated_at": "2026-11-04T16:06:00.970868+00:00",
+  "generated_at": "2026-11-04T16:16:30.780679+00:00",
   "schema_version": 2,
   "scope": [
     "data",
@@ -177,8 +177,8 @@
   ],
   "sqlite_schema_version": 3,
   "totals": {
-    "bytes": 185476075,
+    "bytes": 185469765,
     "files": 28,
-    "lines": 627295
+    "lines": 627296
   }
 }
