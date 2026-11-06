@@ -114,5 +114,5 @@ xiaoxue_尔雅        2
 
 ## 相关
 
-- [hanzi-glyphs-svg](https://github.com/zhouyongh/hanzi-glyphs-svg)：字形（篆书等）与逐字图片。
+- [hanzi-glyphs-svg](https://github.com/zhouyongh/hanzi-glyphs-svg)：字形（篆书等）与逐字图片；本库指针 `glyph:hanzi-glyphs-svg:uid:<unified_id>`（见 docs/glyph-pointer-contract.md）。
 - 本库自己的部分以 CC0 释出：引用、转载、改写都不需要署名；方便的话注明仓库地址即可。

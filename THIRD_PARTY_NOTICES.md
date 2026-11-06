@@ -78,7 +78,7 @@ CC0 1.0 释出，CC0 是放弃权利，不是许可别人加条件。
 ### hanzi-glyphs-svg
 
 - **来源**：<https://github.com/zhouyongh/hanzi-glyphs-svg>
-- **使用方式**：**仅存指针**（`glyph:<repo>:<layer>:<key>`），**不复制任何字形文件**。
+- **使用方式**：**仅存指针**（`glyph:<repo>:uid:<unified_id>`），**不复制任何字形文件**。
   本版有 **19,212 条 `glyph` 边**指向它。
 - **许可**：随该仓库逐层不同（甲骨 JGW 批 CC BY 4.0；汉典各批 CC0 1.0 等），
   详见该仓库的 `LICENSE-DATA` 与 `THIRD_PARTY_NOTICES.md`。

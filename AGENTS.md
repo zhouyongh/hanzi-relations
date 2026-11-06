@@ -5,7 +5,7 @@
 
 本仓库只做**关系与引用**。字形文件在 `hanzi-glyphs-svg`，本仓库只存指向它的指针。
 
-字形指针格式、已发布层与 G-identity 见 [docs/glyph-pointer-contract.md](docs/glyph-pointer-contract.md)；实现与白名单在 `src/glyph_pointer.py`。
+字形指针格式（v2：`glyph:<repo>:uid:<unified_id>`）、已发布层与 G-identity 见 [docs/glyph-pointer-contract.md](docs/glyph-pointer-contract.md)；实现与白名单在 `src/glyph_pointer.py`。扩层 identity 见 [docs/glyph-layer-expand-identity.md](docs/glyph-layer-expand-identity.md)。
 
 ## 版本边界（v1）
 

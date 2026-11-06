@@ -73,10 +73,10 @@
       "sha256": "7222389e9610d090fc3019b46333076ac92a8c274ea3c3e661f3e65b8d6c5491"
     },
     {
-      "bytes": 18658280,
+      "bytes": 18885969,
       "lines": 172031,
       "path": "data/relations/part-00002.jsonl",
-      "sha256": "a28729ac831d7a544a2077ea46ab03503e7d93dc9a2eb49c760fe842b1d5e2db"
+      "sha256": "2622c8c003f5c396bc1f944c8b9bc9646351a290fbf67450b50215a3fccb319d"
     },
     {
       "bytes": 0,
@@ -169,7 +169,7 @@
       "sha256": "ddd802351209f2538e972490089b449de7885c1694a5a8d69f66a74ea4c00a1c"
     }
   ],
-  "generated_at": "2026-11-04T16:16:30.780679+00:00",
+  "generated_at": "2026-11-06T16:42:40.803621+00:00",
   "schema_version": 2,
   "scope": [
     "data",
@@ -177,7 +177,7 @@
   ],
   "sqlite_schema_version": 3,
   "totals": {
-    "bytes": 185469765,
+    "bytes": 185697454,
     "files": 28,
     "lines": 627296
   }

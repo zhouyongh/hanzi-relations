@@ -142,6 +142,8 @@ def main() -> int:
                     help="字形仓库路径（兄弟仓库 hanzi-glyphs-svg）。"
                          "缺省依次取：命令行参数 → 环境变量 HANZI_GLYPHS_SVG → "
                          "本仓库的同级目录。找不到就整体跳过 G3（不是报错）。")
+    ap.add_argument("--glyph-ref", default=None,
+                    help="字形账本 git ref（默认 v1.0.0；空字符串=读工作树）")
     args = ap.parse_args()
 
     # ---------- 载入 ----------
@@ -816,29 +818,46 @@ def main() -> int:
         if sid not in stmt_counts:
             err("P3", f"provenance/{sid}.jsonl 存在但 statements 里没有该来源的陈述")
 
+
     # ---------- G. 字形指针 ----------
-    # 字形文件在**兄弟仓库** `hanzi-glyphs-svg`（公开：zhouyongh/hanzi-glyphs-svg）。
-    # 本仓库只存指针：
-    #   G1 格式  glyph:<repo>:<layer>:<key>
-    #   G2 层 ∈ 已发布白名单（单一事实源：glyph_pointer.PUBLISHED_LAYERS）
-    #   G3 文件存在（兄弟仓可得时）
-    #   G4 G-identity：index.csv 的 unicode（优先）或 modern_char 必须对准字头
-    #      —— 不做异体映射。兄弟仓或 index 不可得时 G3/G4 **跳过并明示**，不得假绿。
+    # 字形文件在**兄弟仓库** `hanzi-glyphs-svg`。
+    # 本仓库只存指针（v2 硬切）：
+    #   G1 格式  glyph:<repo>:uid:<unified_id>
+    #   G2 层 ∈ 已发布白名单（账本解析出的 layer ∈ PUBLISHED_LAYERS）
+    #   G3 文件存在（账本 → layer/file 后查兄弟仓工作树）
+    #   G4 G-identity：账本 unicode（优先）或 modern_char 必须对准字头
+    #      —— 不做异体映射。账本不可得时 G3/G4 **跳过并明示**，不得假绿。
     glyph_repo = (args.glyph_repo
                   or os.environ.get("HANZI_GLYPHS_SVG")
                   or os.path.join(os.path.dirname(ROOT), "hanzi-glyphs-svg"))
+    glyph_ref_arg = getattr(args, "glyph_ref", None)
+    if glyph_ref_arg is None:
+        glyph_ref = glyph_pointer_mod.DEFAULT_GLYPH_REF
+    elif glyph_ref_arg == "":
+        glyph_ref = None
+    else:
+        glyph_ref = glyph_ref_arg
     glyph_checked = glyph_missing = glyph_total = 0
     identity_checked = identity_mismatch = 0
     identity_skipped = False
     published_layers = set(glyph_pointer_mod.PUBLISHED_LAYERS)
     glyph_avail = os.path.isdir(os.path.join(glyph_repo, "glyphs"))
-    layer_indexes: dict[str, dict] = {}
+    by_uid = {}
+    ledger_meta = {}
     if glyph_avail:
-        for layer in sorted(published_layers):
-            layer_indexes[layer] = glyph_pointer_mod.load_layer_index(glyph_repo, layer)
-        if not any(layer_indexes.values()):
+        try:
+            by_uid, _stem, ledger_meta = glyph_pointer_mod.load_ledger(
+                glyph_repo, glyph_ref
+            )
+        except Exception as exc:
             identity_skipped = True
-            warn("G4", "字形仓在，但已发布层的 index.csv 都读不到——G-identity 跳过（非假绿）")
+            warn("G4", f"字形账本读失败（{exc}）——G-identity/G3 跳过（非假绿）")
+            by_uid = {}
+        if not by_uid and not identity_skipped:
+            identity_skipped = True
+            warn("G4", "字形仓在，但账本无 active 行——G-identity 跳过（非假绿）")
+    else:
+        warn("G3", f"字形仓库不可得：{glyph_repo}——G3/G4 跳过（非假绿）")
 
     for r in relations:
         if r.get("type") != "glyph":
@@ -846,16 +865,28 @@ def main() -> int:
         glyph_total += 1
         parsed = glyph_pointer_mod.parse_glyph_target(r.get("to") or "")
         if not parsed:
-            err("G1", f"边 {r.get('relation_id')} 的 glyph 目标格式非法：{r.get('to')}")
+            err("G1", f"边 {r.get('relation_id')} 的 glyph 目标格式非法：{r.get('to')}"
+                      f"（须为 glyph:<repo>:uid:<unified_id>；旧 layer:key 已硬切失效）")
             continue
-        repo, layer, key = parsed
+        repo, uid = parsed
+        if repo != glyph_pointer_mod.REPO_NAME:
+            err("G1", f"边 {r.get('relation_id')} 的 glyph repo 非预期：{repo}")
+            continue
+        if not by_uid:
+            continue
+        row = by_uid.get(uid)
+        if not row:
+            glyph_missing += 1
+            if glyph_missing <= 5:
+                err("G3", f"边 {r.get('relation_id')} 的 uid 不在账本：{uid}")
+            continue
+        layer = row["layer"]
         if layer not in published_layers:
             err("G2", f"边 {r.get('relation_id')} 指向未发布的字形层 {layer}"
-                      f"（v1 只允许 {sorted(published_layers)}）")
+                      f"（允许 {sorted(published_layers)}）")
             continue
-        if not glyph_avail:
-            continue
-        path = os.path.join(glyph_repo, "glyphs", layer, f"{key}.svg")
+        file_name = row["file"]
+        path = os.path.join(glyph_repo, "glyphs", layer, file_name)
         if not os.path.exists(path):
             glyph_missing += 1
             if glyph_missing <= 5:
@@ -863,16 +894,6 @@ def main() -> int:
         else:
             glyph_checked += 1
 
-        # G4 identity
-        idx = layer_indexes.get(layer) or {}
-        if not idx:
-            continue
-        index_row = idx.get(key)
-        if not index_row:
-            identity_mismatch += 1
-            if identity_mismatch <= 5:
-                err("G4", f"边 {r.get('relation_id')} 的键 {layer}:{key} 不在 index.csv")
-            continue
         cid = (r.get("from") or "").split(":", 1)[-1]
         char_row = char_by_id.get(cid)
         if not char_row:
@@ -880,15 +901,22 @@ def main() -> int:
             if identity_mismatch <= 5:
                 err("G4", f"边 {r.get('relation_id')} 的字头 {cid} 不存在，无法做 G-identity")
             continue
-        ok, reason = glyph_pointer_mod.identity_match(char_row, index_row)
+        ok, reason = glyph_pointer_mod.identity_match(char_row, row)
         identity_checked += 1
         if not ok:
             identity_mismatch += 1
             if identity_mismatch <= 10:
                 err("G4", f"边 {r.get('relation_id')} G-identity 失败（{reason}）："
                           f"字头 {char_row.get('head')!r}/{char_row.get('modern_codepoints')!r} "
-                          f"↛ {layer}:{key} modern={index_row.get('modern_char')!r} "
-                          f"unicode={index_row.get('unicode')!r}")
+                          f"uid={uid} layer={layer} modern={row.get('modern_char')!r} "
+                          f"unicode={row.get('unicode')!r}")
+
+    if glyph_total:
+        ref_note = ledger_meta.get("_pinned_ref") or "workdir"
+        print(f"  G 字形指针       : {glyph_total} 边；G3 核 {glyph_checked} 缺 {glyph_missing}；"
+              f"G4 核 {identity_checked} 错 {identity_mismatch}；账本 {ref_note}")
+        if identity_skipped:
+            print(f"                    G4 已跳过（非假绿）")
 
     # ---------- 报告 ----------
     print("=" * 62)

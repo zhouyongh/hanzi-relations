@@ -25,6 +25,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # JSONL 讀寫（分片支持）：見 src/jsonl_io.py
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from jsonl_io import read_jsonl, read_jsonl_any, read_jsonl_dir  # noqa: E402
+import glyph_pointer as gp
 # 顯示層分詞（斷句讀 + 分詞；不進 data/，jieba 缺席時自動退化）
 from display_text import wordize  # noqa: E402
 DATA = os.path.join(ROOT, "data")
@@ -495,6 +496,34 @@ def main() -> int:
         if r["basis"] == "containment" and r["sw"]:
             contain_by_sw[r["sw"]].append(r)
 
+    # uid → layer/file（钉账本；边只存 uid，页面取 SVG 时查此表）
+    glyph_repo = (
+        os.environ.get("HANZI_GLYPHS_SVG")
+        or os.path.join(os.path.dirname(ROOT), "hanzi-glyphs-svg")
+    )
+    glyph_ref = os.environ.get("HANZI_GLYPHS_REF", gp.DEFAULT_GLYPH_REF)
+    glyph_resolve: dict[str, dict] = {}
+    try:
+        _ref = None if glyph_ref == "" else glyph_ref
+        by_uid, _stem, _meta = gp.load_ledger(glyph_repo, _ref)
+        needed = set()
+        for tos in glyph_by_char.values():
+            for gto in tos:
+                parsed = gp.parse_glyph_target(gto)
+                if parsed:
+                    needed.add(parsed[1])
+        for uid in needed:
+            row = by_uid.get(uid)
+            if row:
+                glyph_resolve[uid] = {
+                    "layer": row["layer"],
+                    "file": row["file"],
+                    "stem": row["stem"],
+                }
+        print(f"  字形账本 {glyph_ref}: resolve {len(glyph_resolve)}/{len(needed)} uid")
+    except Exception as exc:
+        print(f"  WARN: 字形账本不可用（{exc}）；浏览页字形 SVG 可能离线")
+
     glyphs = {k: v for k, v in glyph_by_char.items() if v}
 
     src_meta = {s["source_id"]: {"n": s.get("name"), "l": s.get("license"),
@@ -629,7 +658,8 @@ def main() -> int:
     payload = {
         "c": index,          # chars
         "s": detail,         # statements by char_id（引文正文已剥离）
-        "g": glyphs,         # glyph pointers
+        "g": glyphs,         # glyph pointers (uid)
+        "gr": glyph_resolve, # uid -> {layer,file,stem}
         "b": cite_books,     # char_id -> {被引书名: 条数}
         "va": variant_map,   # char_id -> 版本对照差异（大徐 vs 段注/小徐）
         "cp": comp_map,      # char_id -> 构件/声符
@@ -1461,13 +1491,25 @@ function renderDetail(c){
   if (gl && gl.length){
     h += '<div class="sec">字形（指向 hanzi-glyphs-svg）</div><div class="card">';
     for (const g of gl){
-      const p = g.split(':');
-      h += '<span class="pill g">'+esc(p[2])+' · '+esc(p[3])+'</span>';
+      const p = String(g||'').split(':');
+      let label = esc(p[2])+' · '+esc(p[3]);
+      if (p.length===4 && p[2]==='uid' && D.gr && D.gr[p[3]]){
+        const loc = D.gr[p[3]];
+        label = esc(loc.layer)+' · '+esc(p[3]);
+      }
+      h += '<span class="pill g">'+label+'</span>';
     }
-    const first = gl[0].split(':');
-    h += '<div class="lnk">字形文件在 <code>hanzi-glyphs-svg/glyphs/'+esc(first[2])+'/'+
-         '</code>，本库只存指针不复制。</div></div>';
+    const first = String(gl[0]||'').split(':');
+    let layer = first[2], file = (first[3]||'') + (String(first[3]||'').endsWith('.svg')?'':'.svg');
+    if (first.length===4 && first[2]==='uid' && D.gr && D.gr[first[3]]){
+      const loc = D.gr[first[3]];
+      layer = loc.layer;
+      file = loc.file || ((loc.stem||'')+'.svg');
+    }
+    h += '<div class="lnk">字形文件在 <code>hanzi-glyphs-svg/glyphs/'+esc(layer)+'/'+esc(file)+
+         '</code>；指针 <code>'+esc(gl[0])+'</code>。本库只存指针不复制。</div></div>';
   }
+
   /* 引文：康熙条目里内嵌的他书引文（浏览页只列书名与条数，正文在 SQLite/JSONL） */
   const cb = (D.b || {})[c.id];
   if (cb && Object.keys(cb).length){
